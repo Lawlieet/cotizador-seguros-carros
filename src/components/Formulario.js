@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
+import {obtenerDiferenciaYear, calcularMarca, obtenerPlan} from '../healper'
 
 const Campo = styled.div`
     display:flex;
@@ -75,11 +76,29 @@ const Formulario = () => {
     // HandleSubmit
     const cotizarSeguro = e => {
         e.preventDefault();
+        //Validar los datos
         if(marca.trim() ==='' || plan.trim() === '' || year.trim() === ''){
             setGuardarError(true);
             return
         }
         setGuardarError(false);
+
+        // Base 2000
+        let resultado = 2000;
+
+        // Obtener dif de años
+        const diferencia = obtenerDiferenciaYear(year);
+        // por caño restar 3%
+        resultado -= ((diferencia * 3)* resultado) / 100;
+        // Americano 15% - Asiatico 5% - Europeo 30%
+        resultado = calcularMarca(marca) * resultado;
+        // Plan Basico 20% - Completo 50%
+        const incrementoPlan = obtenerPlan(plan);
+        resultado = parseFloat(incrementoPlan * resultado).toFixed(2);
+        // Total
+        
+            
+        
     }
     return (
         <form
