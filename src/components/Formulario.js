@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import {obtenerDiferenciaYear, calcularMarca, obtenerPlan} from '../healper'
+import PropTypes from 'prop-types'
 
 const Campo = styled.div`
     display:flex;
@@ -51,7 +52,7 @@ const Error = styled.div`
     margin-bottom: 2rem;
 `;
 
-const Formulario = () => {
+const Formulario = ({setGuardarResumen, setGuardarCargando}) => {
 
     const [ datos, setGuardarDatos] = useState({
         marca:'',
@@ -95,9 +96,21 @@ const Formulario = () => {
         // Plan Basico 20% - Completo 50%
         const incrementoPlan = obtenerPlan(plan);
         resultado = parseFloat(incrementoPlan * resultado).toFixed(2);
-        // Total
         
-            
+        setGuardarCargando(true)
+
+        setTimeout(()=>{
+            // Eliminar spinner
+            setGuardarCargando(false)
+             // Se encarga de pasar los datos o informacion al componente principal
+            setGuardarResumen({
+                cotizacion : Number(resultado),
+                datos
+            })
+        }, 3000)
+
+       
+        
         
     }
     return (
@@ -169,6 +182,11 @@ const Formulario = () => {
             <Button type="submit">Cotizar</Button>
         </form>
     )
+}
+
+Formulario.propTypes = {
+    setGuardarResumen: PropTypes.func.isRequired,
+    setGuardarCargando: PropTypes.func.isRequired
 }
 
 export default Formulario
